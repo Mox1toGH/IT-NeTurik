@@ -1,3 +1,37 @@
-<h2>Вітаю, {{ request.user.username }}!</h2>
-<p>Ви увійшли в систему.</p>
-<a href="{% url 'logout' %}">Вийти</a>
+{% extends 'base.html' %}
+
+{% block title %}Профіль{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+  <div class="card shadow p-4 mb-5 bg-body rounded" style="width: 100%; max-width: 500px;">
+    <h2 class="text-center mb-4">👤 Профіль користувача</h2>
+
+    <ul class="list-group list-group-flush text-center">
+      <li class="list-group-item">
+        <strong>Імʼя користувача:</strong> {{ user.username }}
+      </li>
+      {% if user.email %}
+      <li class="list-group-item">
+        <strong>Email:</strong> {{ user.email }}
+      </li>
+      {% endif %}
+      <li class="list-group-item">
+        <strong>Останній вхід:</strong> {{ user.last_login|date:"d.m.Y H:i" }}
+      </li>
+      <li class="list-group-item">
+        <strong>Роль:</strong> {{ user.userprofile.get_role_display }}
+      </li>
+    </ul>
+
+    <div class="mt-4 text-center">
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger w-100">
+          Вийти
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
