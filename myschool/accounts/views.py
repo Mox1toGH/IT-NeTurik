@@ -13,17 +13,17 @@ def singup_view(request):
         password2 = request.POST['password2']
         if User.objects.filter(username=username).exists():
             messages.error(request, "Ім'я користувача вже зайняте.")
-            return redirect('singup')
+            return redirect('signup')
         
         if password1 != password2:
             messages.eror(request, 'Паролі не співпадають.')
-            return redirect('singup')
+            return redirect('signup')
         
         user = User.objects.create_user(username=username, password=password1)
         login(request, user)
         return redirect('profile')
     
-    return render(request, 'accounts/singup.html')
+    return render(request, 'accounts/signup.html')
 
 def login_view(request):
     if request.user.is_authenticated:
