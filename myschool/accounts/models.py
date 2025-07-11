@@ -14,3 +14,10 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.role}'
+    
+class School(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    director = models.OneToOneField(User, on_delete=models.CASCADE, related_name="school")
+
+    def __str__(self):
+        return self.name

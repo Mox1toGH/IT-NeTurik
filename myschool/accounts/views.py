@@ -3,8 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import UserProfile
+from .models import UserProfile, School
+from .forms import SchoolForm
 from django.views.decorators.http import require_POST
+
+from django.http import HttpResponseForbidden
 
 
 def singup_view(request):
@@ -102,3 +105,25 @@ def delete_account_view(request):
     user.delete()
     messages.success(request, "Акаунт видалено.")
     return redirect('login')
+
+@login_required
+def create_school_view(request):
+    if not hasattr(request.user, 'userprofile') or request.user.userprofile.role != 'director':
+        return HttpResponseForbidden("Тільки директор може створювати школу.")
+
+    if School.objects.filter(director=request.user).exists():
+        messages.warning(request, "Ви вже створили школу.")
+        return redirect('profile')
+
+    if request.method == 'POST':
+        form = SchoolForm(request.POST)
+        if form.is_valid():
+            school = form.save(commit=False)
+            school.director = request.user
+            school.save()
+            messages.success(request, "Школу створено.")
+            return redirect('profile')
+    else:
+        form = SchoolForm()
+
+    return render(request, 'accounts/create_school.html', {'form': form})

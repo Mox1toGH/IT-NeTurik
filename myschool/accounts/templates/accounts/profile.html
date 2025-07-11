@@ -28,8 +28,16 @@
         <li class="list-group-item">
             <strong>Роль:</strong> {{ user.userprofile.get_role_display }}
         </li>
+        {% if user.userprofile.role == 'director' and not user.school %}
+        <li class="list-group-item">
+            <a href="{% url 'create_school' %}" class="btn btn-success w-100 mt-3">🏫 Створити школу</a>
+        </li>
+        {% elif user.userprofile.role == 'director' and user.school %}
+        <li class="list-group-item">
+            <strong>Школа:</strong> {{ user.school.name }}
+        </li>
+        {% endif %}
     </ul>
-
 
     <div class="mt-4 d-flex justify-content-between">
       <!-- Редагувати -->
