@@ -8,28 +8,97 @@
     <h2 class="text-center mb-4">👤 Профіль користувача</h2>
 
     <ul class="list-group list-group-flush text-center">
-      <li class="list-group-item">
-        <strong>Імʼя користувача:</strong> {{ user.username }}
-      </li>
-      {% if user.email %}
-      <li class="list-group-item">
-        <strong>Email:</strong> {{ user.email }}
-      </li>
-      {% endif %}
-      <li class="list-group-item">
-        <strong>Останній вхід:</strong> {{ user.last_login|date:"d.m.Y H:i" }}
-      </li>
-      <li class="list-group-item">
-        <strong>Роль:</strong> {{ user.userprofile.get_role_display }}
-      </li>
+        <li class="list-group-item">
+            <strong>Імʼя користувача:</strong> {{ user.username }}
+        </li>
+        <li class="list-group-item">
+            <strong>Імʼя:</strong> {{ user.first_name }}
+        </li>
+        <li class="list-group-item">
+            <strong>Прізвище:</strong> {{ user.last_name }}
+        </li>
+        {% if user.email %}
+        <li class="list-group-item">
+            <strong>Email:</strong> {{ user.email }}
+        </li>
+        {% endif %}
+        <li class="list-group-item">
+            <strong>Останній вхід:</strong> {{ user.last_login|date:"d.m.Y H:i" }}
+        </li>
+        <li class="list-group-item">
+            <strong>Роль:</strong> {{ user.userprofile.get_role_display }}
+        </li>
     </ul>
 
-    <div class="mt-4 text-center">
+
+    <div class="mt-4 d-flex justify-content-between">
+      <!-- Редагувати -->
+      <button class="btn btn-warning w-50 me-1" data-bs-toggle="modal" data-bs-target="#editModal">Редагувати</button>
+      <!-- Видалити -->
+      <button class="btn btn-danger w-50 ms-1" data-bs-toggle="modal" data-bs-target="#deleteModal">Видалити</button>
+    </div>
+
+    <div class="mt-3 text-center">
       <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger w-100">
+        <button type="submit" class="btn btn-secondary w-100 mt-2">
           Вийти
         </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Модальне вікно редагування -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'edit_account' %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title">Редагувати профіль</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label>Імʼя</label>
+            <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+          </div>
+          <div class="mb-3">
+            <label>Прізвище</label>
+            <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
+          </div>
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" value="{{ user.email }}">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Модальне вікно видалення -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'delete_account' %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title">Підтвердження видалення</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Ви дійсно хочете <strong>видалити</strong> свій акаунт? Цю дію не можна скасувати.
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Так, видалити</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+        </div>
       </form>
     </div>
   </div>

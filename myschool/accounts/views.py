@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import UserProfile
+from django.views.decorators.http import require_POST
+
 
 def singup_view(request):
     if request.user.is_authenticated:
@@ -69,3 +71,34 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     return render(request, 'accounts/profile.html')
+
+@require_POST
+@login_required
+def edit_account_view(request):
+    user = request.user
+    first_name = request.POST.get('first_name')
+    last_name = request.POST.get('last_name')
+    email = request.POST.get('email')
+
+    # Перевірка, чи email вже зайнятий іншим
+    if User.objects.filter(email=email).exclude(pk=user.pk).exists():
+        messages.error(request, "Користувач з таким email вже існує.")
+        return redirect('profile')
+
+    # Оновлення (але НЕ username!)
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.save()
+
+    messages.success(request, "Профіль успішно оновлено.")
+    return redirect('profile')
+
+@login_required
+@require_POST
+def delete_account_view(request):
+    user = request.user
+    logout(request)
+    user.delete()
+    messages.success(request, "Акаунт видалено.")
+    return redirect('login')

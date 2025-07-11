@@ -1,9 +1,9 @@
-.body {
+body {
     font-family: Arial, sans-serif;
     background: #f3f3f3;
     margin: 0;
 }
-.header {
+header {
     background: #333;
     color: white;
     padding: 1rem;
@@ -17,7 +17,7 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-.footer {
+footer {
     background: #eee;
     text-align: center;
     padding: 10px;

@@ -1,0 +1,88 @@
+/* 🔲 Обгортка повідомлень */
+.custom-alerts-wrapper {
+  position: fixed;
+  top: 70px; /* залежить від висоти navbar */
+  right: 20px;
+  z-index: 1080;
+}
+
+/* 🔲 Панель-фон */
+.custom-alerts-bg {
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+}
+
+/* 🔔 Повідомлення */
+.custom-alert {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  animation: slide-in 0.4s ease-out;
+  position: relative;
+  transition: opacity 0.5s ease;
+}
+
+/* 🔘 Іконка */
+.custom-alert .icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* ❌ Кнопка закриття */
+.custom-alert .close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #000;
+  cursor: pointer;
+  margin-left: auto;
+  line-height: 1;
+}
+
+/* ✅ Стилі за типом повідомлення */
+.alert-success {
+  background: linear-gradient(135deg, #d4fc79, #96e6a1);
+  color: #1b3f0b;
+  box-shadow: 0 4px 12px rgba(148, 239, 166, 0.4);
+}
+
+.alert-danger,
+.alert-error {
+  background: linear-gradient(135deg, #ff9a9e, #ffc1c1); /* м'який рожево-персиковий */
+  color: #6d0b18; /* темно-вишневий */
+  box-shadow: 0 4px 12px rgba(255, 154, 158, 0.4);
+  border: 1px solid rgba(255, 0, 0, 0.15);
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, #f6d365, #fda085);
+  color: #5a3502;
+  box-shadow: 0 4px 12px rgba(253, 160, 133, 0.3);
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+  color: #05376a;
+  box-shadow: 0 4px 12px rgba(161, 196, 253, 0.3);
+}
+
+/* 🌀 Анімація появи */
+@keyframes slide-in {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
